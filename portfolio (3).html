@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pola Venkatesh — UI/UX & Data Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a08;
+    --bg2: #111110;
+    --bg3: #1a1a17;
+    --surface: #1f1f1b;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #f0ede6;
+    --text2: #9a9790;
+    --text3: #5c5a55;
+    --accent: #c8b47a;
+    --accent2: #7cb8a0;
+    --accent3: #c47a7a;
+    --accent-dim: rgba(200,180,122,0.12);
+    --font-display: 'Cormorant Garamond', serif;
+    --font-ui: 'Syne', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --r: 6px;
+    --r2: 12px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-ui);
+    font-size: 15px;
+    line-height: 1.6;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  #cursor {
+    position: fixed; width: 10px; height: 10px;
+    background: var(--accent); border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%,-50%);
+    transition: transform 0.1s, width 0.25s, height 0.25s, opacity 0.2s;
+    mix-blend-mode: difference;
+  }
+  #cursor-ring {
+    position: fixed; width: 36px; height: 36px;
+    border: 1px solid rgba(200,180,122,0.4); border-radius: 50%;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%,-50%);
+    transition: transform 0.18s ease, width 0.25s, height 0.25s;
+  }
+  body:hover #cursor { opacity: 1; }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0; opacity: 0.4;
+  }
+
+  /* Navigation */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 20px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  nav.scrolled {
+    background: rgba(10,10,8,0.9);
+    backdrop-filter: blur(16px);
+    border-color: var(--border);
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 20px; font-weight: 400; letter-spacing: 0.02em;
+    color: var(--text); text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); font-style: italic; }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--text2); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-cta {
+    font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 9px 20px; border: 1px solid var(--border2);
+    background: transparent; color: var(--text); cursor: none;
+    font-family: var(--font-ui); transition: background 0.2s, border-color 0.2s;
+    border-radius: var(--r); text-decoration: none; display: inline-block;
+  }
+  .nav-cta:hover { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+
+  /* Sections */
+  section { position: relative; z-index: 1; }
+
+  /* Hero */
+  #hero {
+    min-height: 100vh; display: flex; align-items: center;
+    padding: 120px 48px 80px;
+    overflow: hidden;
+  }
+  .hero-bg-text {
+    position: absolute; top: 50%; left: -20px;
+    transform: translateY(-50%);
+    font-family: var(--font-display);
+    font-size: clamp(120px, 20vw, 280px);
+    font-weight: 300; color: transparent;
+    -webkit-text-stroke: 1px rgba(255,255,255,0.04);
+    line-height: 1; pointer-events: none; user-select: none;
+    white-space: nowrap;
+  }
+  .hero-content { max-width: 760px; position: relative; }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 28px;
+  }
+  .hero-eyebrow::before {
+    content: ''; display: block; width: 32px; height: 1px; background: var(--accent);
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(52px, 8vw, 96px);
+    font-weight: 300; line-height: 1.0;
+    margin-bottom: 8px; letter-spacing: -0.01em;
+  }
+  h1 em { font-style: italic; color: var(--accent); }
+  .hero-subtitle {
+    font-family: var(--font-display);
+    font-size: clamp(22px, 3vw, 34px);
+    font-weight: 300; color: var(--text2);
+    margin-bottom: 32px; font-style: italic;
+  }
+  .hero-desc {
+    font-size: 15px; color: var(--text2); line-height: 1.8;
+    max-width: 520px; margin-bottom: 48px;
+  }
+  .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+  .btn-primary {
+    font-family: var(--font-ui); font-size: 12px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 14px 32px;
+    background: var(--accent); color: #0a0a08;
+    border: none; cursor: none; border-radius: var(--r);
+    font-weight: 600; text-decoration: none; display: inline-block;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
+  .btn-ghost {
+    font-family: var(--font-ui); font-size: 12px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 13px 32px;
+    background: transparent; color: var(--text2);
+    border: 1px solid var(--border2); cursor: none;
+    border-radius: var(--r); text-decoration: none; display: inline-block;
+    transition: all 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--accent2); color: var(--accent2); }
+  .hero-scroll {
+    position: absolute; bottom: 40px; left: 48px;
+    display: flex; align-items: center; gap: 12px;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text3);
+  }
+  .scroll-line {
+    width: 48px; height: 1px; background: var(--text3);
+    animation: scrollLine 2s ease-in-out infinite;
+  }
+  @keyframes scrollLine {
+    0%,100% { transform: scaleX(1); transform-origin: left; }
+    50% { transform: scaleX(0.4); transform-origin: left; }
+  }
+  .hero-stats {
+    position: absolute; right: 48px; top: 50%;
+    transform: translateY(-50%);
+    display: flex; flex-direction: column; gap: 32px;
+    opacity: 0; animation: fadeUp 0.8s 0.6s forwards;
+  }
+  .stat-item { text-align: right; }
+  .stat-num {
+    font-family: var(--font-display); font-size: 42px;
+    font-weight: 300; color: var(--accent); line-height: 1;
+    display: block;
+  }
+  .stat-label { font-size: 11px; color: var(--text3); letter-spacing: 0.08em; }
+
+  /* About */
+  #about {
+    padding: 100px 48px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+    align-items: center; max-width: 1200px; margin: 0 auto;
+  }
+  .about-left {}
+  .section-tag {
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-tag::before { content: ''; width: 24px; height: 1px; background: var(--accent); display: block; }
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 300; line-height: 1.15; margin-bottom: 24px;
+  }
+  h2 em { font-style: italic; color: var(--accent); }
+  .about-text { color: var(--text2); line-height: 1.85; margin-bottom: 16px; font-size: 15px; }
+  .about-right {}
+  .about-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r2); padding: 28px;
+    margin-bottom: 16px;
+  }
+  .about-card-label {
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--text3); margin-bottom: 12px;
+  }
+  .tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    font-size: 12px; padding: 5px 14px;
+    border: 1px solid var(--border); border-radius: 20px;
+    color: var(--text2); transition: all 0.2s;
+  }
+  .tag:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+  .tag.gold { border-color: rgba(200,180,122,0.3); color: var(--accent); background: var(--accent-dim); }
+  .tag.green { border-color: rgba(124,184,160,0.3); color: var(--accent2); background: rgba(124,184,160,0.08); }
+  .tag.red { border-color: rgba(196,122,122,0.3); color: var(--accent3); background: rgba(196,122,122,0.08); }
+  .edu-item { display: flex; flex-direction: column; gap: 2px; }
+  .edu-title { font-size: 14px; font-weight: 600; color: var(--text); }
+  .edu-sub { font-size: 13px; color: var(--text2); }
+  .edu-year { font-size: 11px; color: var(--text3); font-family: var(--font-mono); }
+
+  /* Work / Projects */
+  #work { padding: 80px 48px; max-width: 1200px; margin: 0 auto; }
+  .work-header {
+    display: flex; justify-content: space-between;
+    align-items: flex-end; margin-bottom: 48px;
+  }
+  .project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; }
+  .project-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--r2); overflow: hidden;
+    transition: border-color 0.25s, transform 0.25s;
+    cursor: none;
+  }
+  .project-card:hover { border-color: var(--border2); transform: translateY(-4px); }
+  .project-card:hover .project-thumb-overlay { opacity: 1; }
+  .project-thumb {
+    height: 200px; position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .project-thumb-overlay {
+    position: absolute; inset: 0;
+    background: rgba(200,180,122,0.08);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.25s;
+  }
+  .overlay-text {
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--accent); border: 1px solid var(--accent);
+    padding: 8px 20px; border-radius: var(--r);
+  }
+  .project-body { padding: 24px; }
+  .project-meta {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 12px;
+  }
+  .project-tag {
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--text3);
+  }
+  .project-year {
+    font-family: var(--font-mono); font-size: 11px; color: var(--text3);
+  }
+  .project-title {
+    font-family: var(--font-display);
+    font-size: 24px; font-weight: 400; margin-bottom: 10px;
+    line-height: 1.2;
+  }
+  .project-desc { font-size: 13px; color: var(--text2); line-height: 1.7; margin-bottom: 20px; }
+  .project-metrics { display: flex; gap: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .project-metric {}
+  .metric-val { font-family: var(--font-display); font-size: 22px; font-weight: 400; color: var(--accent); }
+  .metric-label { font-size: 11px; color: var(--text3); }
+  .project-tools { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+  .tool-pill {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.05em;
+    padding: 3px 10px; border: 1px solid var(--border);
+    border-radius: 4px; color: var(--text3);
+  }
+
+  /* PROJECT LINKS */
+  .project-links {
+    display: flex; gap: 10px; margin-top: 18px;
+    padding-top: 16px; border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .project-link-btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-family: var(--font-ui); font-size: 11px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 8px 16px;
+    border-radius: var(--r); text-decoration: none;
+    transition: all 0.22s; cursor: none;
+    border: 1px solid var(--border2);
+    color: var(--text2); background: transparent;
+  }
+  .project-link-btn svg { width: 13px; height: 13px; flex-shrink: 0; }
+  .project-link-btn:hover {
+    background: var(--accent-dim);
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-1px);
+  }
+  .project-link-btn.live:hover {
+    background: rgba(124,184,160,0.1);
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+  .project-link-btn.demo:hover {
+    background: rgba(196,122,122,0.08);
+    border-color: var(--accent3);
+    color: var(--accent3);
+  }
+
+  /* thumb styles */
+  .thumb-vencart { background: linear-gradient(135deg, #0d1a10 0%, #1a1408 100%); }
+  .thumb-grocery { background: linear-gradient(135deg, #0f0f1a 0%, #1a1508 100%); }
+  .thumb-stroke { background: linear-gradient(135deg, #1a0f0f 0%, #0a0a14 100%); }
+  .thumb-flipkart { background: linear-gradient(135deg, #0f1a1a 0%, #1a0f08 100%); }
+  .thumb-croma { background: linear-gradient(135deg, #1a1a17 0%, #0d1a14 100%); }
+  .thumb-uiux { background: linear-gradient(135deg, #1a0f1a 0%, #0a0d1a 100%); }
+
+  /* Skills section */
+  #skills { padding: 80px 48px; border-top: 1px solid var(--border); }
+  .skills-inner { max-width: 1200px; margin: 0 auto; }
+  .skills-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 80px; margin-top: 48px; }
+  .skills-intro { color: var(--text2); line-height: 1.85; font-size: 15px; }
+  .skills-groups { display: flex; flex-direction: column; gap: 32px; }
+  .skill-group-title {
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text3); margin-bottom: 16px;
+  }
+  .skill-bars { display: flex; flex-direction: column; gap: 14px; }
+  .skill-row { display: flex; align-items: center; gap: 16px; }
+  .skill-name-label { font-size: 13px; color: var(--text2); min-width: 130px; }
+  .skill-track { flex: 1; height: 2px; background: var(--border2); border-radius: 2px; }
+  .skill-fill {
+    height: 2px; border-radius: 2px; width: 0;
+    transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .skill-pct { font-family: var(--font-mono); font-size: 11px; color: var(--text3); min-width: 32px; text-align: right; }
+
+  /* Timeline */
+  #timeline { padding: 80px 48px; border-top: 1px solid var(--border); }
+  .timeline-inner { max-width: 900px; margin: 48px auto 0; }
+  .tl-item { display: grid; grid-template-columns: 120px 1px 1fr; gap: 0 24px; margin-bottom: 40px; }
+  .tl-year { font-family: var(--font-mono); font-size: 12px; color: var(--text3); padding-top: 4px; text-align: right; }
+  .tl-line { background: var(--border); position: relative; }
+  .tl-dot {
+    position: absolute; top: 6px; left: 50%;
+    transform: translateX(-50%);
+    width: 8px; height: 8px; border-radius: 50%;
+    border: 1px solid var(--accent); background: var(--bg);
+  }
+  .tl-content { padding-bottom: 32px; }
+  .tl-title { font-size: 16px; font-weight: 600; margin-bottom: 4px; color: var(--text); }
+  .tl-org { font-size: 13px; color: var(--accent); margin-bottom: 6px; }
+  .tl-desc { font-size: 13px; color: var(--text2); line-height: 1.7; }
+
+  /* Contact */
+  #contact {
+    padding: 100px 48px;
+    text-align: center; border-top: 1px solid var(--border);
+  }
+  .contact-inner { max-width: 600px; margin: 0 auto; }
+  .contact-big {
+    font-family: var(--font-display);
+    font-size: clamp(48px, 8vw, 88px);
+    font-weight: 300; line-height: 1.05;
+    margin: 24px 0; letter-spacing: -0.02em;
+  }
+  .contact-big em { font-style: italic; color: var(--accent); }
+  .contact-sub { color: var(--text2); margin-bottom: 48px; font-size: 15px; }
+  .contact-links { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; }
+  .contact-link {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--text2); text-decoration: none;
+    border: 1px solid var(--border); padding: 10px 22px;
+    border-radius: var(--r); transition: all 0.2s;
+  }
+  .contact-link:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+  .contact-link svg { width: 14px; height: 14px; }
+
+  /* Footer */
+  footer {
+    padding: 24px 48px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid var(--border);
+    font-size: 12px; color: var(--text3);
+    font-family: var(--font-mono);
+  }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { opacity: 0; animation: fadeUp 0.7s ease forwards; }
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.25s; }
+  .delay-3 { animation-delay: 0.4s; }
+  .delay-4 { animation-delay: 0.55s; }
+  .delay-5 { animation-delay: 0.7s; }
+
+  /* Divider */
+  .divider { width: 100%; height: 1px; background: var(--border); margin: 0; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    #hero { padding: 100px 24px 80px; }
+    .hero-stats { display: none; }
+    #about { padding: 60px 24px; grid-template-columns: 1fr; gap: 40px; }
+    #work { padding: 60px 24px; }
+    .work-header { flex-direction: column; gap: 16px; align-items: flex-start; }
+    .skills-layout { grid-template-columns: 1fr; gap: 40px; }
+    #skills, #timeline, #contact { padding: 60px 24px; }
+    .tl-item { grid-template-columns: 80px 1px 1fr; }
+    footer { flex-direction: column; gap: 8px; text-align: center; padding: 20px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">Pola <span>Venkatesh</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#timeline">Education</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="mailto:venkateshpola@email.com" class="nav-cta">Hire me</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg-text">DESIGN</div>
+  <div class="hero-content">
+    <div class="hero-eyebrow fade-up">Available for internship</div>
+    <h1 class="fade-up delay-1">Pola<br/><em>Venkatesh</em></h1>
+    <p class="hero-subtitle fade-up delay-2">UI/UX Designer &amp; Data Analyst</p>
+    <p class="hero-desc fade-up delay-3">
+      B.Tech student specialising in data science and human-centred design. I build intuitive digital products — from Figma prototypes to Python-powered analytics — for an AI-first world.
+    </p>
+    <div class="hero-actions fade-up delay-4">
+      <a href="#work" class="btn-primary">View my work</a>
+      <a href="https://linkedin.com/in/venkateshpola" target="_blank" class="btn-ghost">LinkedIn ↗</a>
+    </div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-item">
+      <span class="stat-num">6+</span>
+      <span class="stat-label">Projects delivered</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">3</span>
+      <span class="stat-label">Tech stacks</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">∞</span>
+      <span class="stat-label">Curiosity</span>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll to explore
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-left">
+    <div class="section-tag">About me</div>
+    <h2>Designing where <em>data</em> meets experience</h2>
+    <p class="about-text">
+      I'm Pola Venkatesh, a B.Tech student enrolled in the Innomatics Research Labs data science programme, based in Hyderabad. I sit at the intersection of data analysis and product design — turning raw datasets into insights, and those insights into interfaces people actually enjoy using.
+    </p>
+    <p class="about-text">
+      My work spans Selenium/BeautifulSoup web scraping, exploratory data analysis with Python, SQL database engineering, and UI/UX design thinking. I believe every design decision should be backed by evidence, and every data project should ultimately serve a human.
+    </p>
+    <div style="display:flex;gap:12px;margin-top:28px;">
+      <a href="https://github.com/Venkateshpola201" target="_blank" class="btn-ghost" style="font-size:11px;padding:10px 20px;">GitHub ↗</a>
+      <a href="https://linkedin.com/in/venkateshpola" target="_blank" class="btn-ghost" style="font-size:11px;padding:10px 20px;">LinkedIn ↗</a>
+    </div>
+  </div>
+
+  <div class="about-right">
+    <div class="about-card">
+      <div class="about-card-label">Design skills</div>
+      <div class="tag-cloud">
+        <span class="tag gold">Figma</span>
+        <span class="tag gold">Wireframing</span>
+        <span class="tag gold">User research</span>
+        <span class="tag gold">Prototyping</span>
+        <span class="tag gold">Interaction design</span>
+        <span class="tag">Adobe XD</span>
+        <span class="tag">Design systems</span>
+      </div>
+    </div>
+    <div class="about-card">
+      <div class="about-card-label">Technical skills</div>
+      <div class="tag-cloud">
+        <span class="tag green">Python</span>
+        <span class="tag green">Pandas &amp; NumPy</span>
+        <span class="tag green">Matplotlib / Seaborn</span>
+        <span class="tag green">Selenium</span>
+        <span class="tag green">BeautifulSoup</span>
+        <span class="tag green">SQL / MySQL</span>
+        <span class="tag">HTML / CSS</span>
+        <span class="tag green">JavaScript</span>
+        <span class="tag">Jupyter Notebooks</span>
+        <span class="tag">Git &amp; GitHub</span>
+        <span class="tag">Streamlit</span>
+      </div>
+    </div>
+    <div class="about-card">
+      <div class="about-card-label">Education</div>
+      <div class="edu-item">
+        <span class="edu-title">B.Tech — Electronics And Communication Engineering</span>
+        <span class="edu-sub">HITAM 2021 — 2025 · CGPA : 7.42</span>
+        <span class="edu-year">· Hyderabad, India</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- WORK -->
+<section id="work">
+  <div class="work-header">
+    <div>
+      <div class="section-tag">Selected work</div>
+      <h2>Projects &amp; <em>case studies</em></h2>
+    </div>
+  </div>
+
+  <div class="project-grid">
+
+    <!-- Project 1: VenCart E-Commerce -->
+    <div class="project-card">
+      <div class="project-thumb thumb-vencart">
+        <!-- Redesigned thumbnail showing a real e-commerce UI mockup -->
+        <svg viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+          <!-- Browser frame -->
+          <rect x="20" y="18" width="300" height="164" rx="6" fill="rgba(20,30,22,0.9)" stroke="rgba(124,184,160,0.2)" stroke-width="0.8"/>
+          <!-- Top bar -->
+          <rect x="20" y="18" width="300" height="18" rx="6" fill="rgba(124,184,160,0.1)"/>
+          <circle cx="33" cy="27" r="3.5" fill="rgba(196,122,122,0.5)"/>
+          <circle cx="44" cy="27" r="3.5" fill="rgba(200,180,122,0.5)"/>
+          <circle cx="55" cy="27" r="3.5" fill="rgba(124,184,160,0.5)"/>
+          <rect x="70" y="22" width="180" height="10" rx="5" fill="rgba(255,255,255,0.05)"/>
+          <text x="160" y="30" text-anchor="middle" font-size="6" fill="rgba(124,184,160,0.5)" font-family="monospace">vencart.store</text>
+          <!-- Nav bar -->
+          <rect x="20" y="36" width="300" height="18" fill="rgba(10,20,12,0.95)"/>
+          <text x="36" y="48" font-size="7" fill="rgba(200,180,122,0.9)" font-family="serif" font-weight="bold">VenCart</text>
+          <rect x="90" y="42" width="24" height="5" rx="2" fill="rgba(255,255,255,0.1)"/>
+          <rect x="120" y="42" width="24" height="5" rx="2" fill="rgba(255,255,255,0.1)"/>
+          <rect x="150" y="42" width="24" height="5" rx="2" fill="rgba(255,255,255,0.1)"/>
+          <!-- Cart icon -->
+          <rect x="290" y="40" width="20" height="10" rx="2" fill="rgba(124,184,160,0.2)" stroke="rgba(124,184,160,0.4)" stroke-width="0.5"/>
+          <text x="300" y="48" text-anchor="middle" font-size="6" fill="rgba(124,184,160,0.9)">🛒</text>
+          <!-- Hero banner -->
+          <rect x="20" y="54" width="300" height="36" fill="rgba(124,184,160,0.07)"/>
+          <text x="36" y="69" font-size="9" fill="rgba(200,180,122,0.85)" font-family="serif">Premium Laptops</text>
+          <text x="36" y="81" font-size="7" fill="rgba(255,255,255,0.35)" font-family="monospace">Free shipping on orders above ₹50,000</text>
+          <rect x="240" y="59" width="60" height="22" rx="4" fill="rgba(200,180,122,0.15)" stroke="rgba(200,180,122,0.3)" stroke-width="0.5"/>
+          <text x="270" y="73" text-anchor="middle" font-size="7" fill="rgba(200,180,122,0.8)">Shop Now →</text>
+          <!-- Product grid — 4 cards -->
+          <!-- Card 1 -->
+          <rect x="26" y="97" width="62" height="72" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(124,184,160,0.15)" stroke-width="0.5"/>
+          <rect x="30" y="101" width="54" height="34" rx="2" fill="rgba(124,184,160,0.08)"/>
+          <!-- Laptop icon -->
+          <rect x="40" y="108" width="34" height="20" rx="2" fill="rgba(124,184,160,0.2)" stroke="rgba(124,184,160,0.4)" stroke-width="0.5"/>
+          <rect x="37" y="128" width="40" height="3" rx="1" fill="rgba(124,184,160,0.15)"/>
+          <rect x="30" y="140" width="30" height="4" rx="1" fill="rgba(255,255,255,0.12)"/>
+          <rect x="30" y="148" width="22" height="4" rx="1" fill="rgba(200,180,122,0.6)"/>
+          <rect x="30" y="156" width="54" height="9" rx="3" fill="rgba(124,184,160,0.2)"/>
+          <text x="57" y="163" text-anchor="middle" font-size="6" fill="rgba(124,184,160,0.8)">Add to Cart</text>
+          <!-- Card 2 -->
+          <rect x="96" y="97" width="62" height="72" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(200,180,122,0.15)" stroke-width="0.5"/>
+          <rect x="100" y="101" width="54" height="34" rx="2" fill="rgba(200,180,122,0.08)"/>
+          <rect x="110" y="108" width="34" height="20" rx="2" fill="rgba(200,180,122,0.2)" stroke="rgba(200,180,122,0.4)" stroke-width="0.5"/>
+          <rect x="107" y="128" width="40" height="3" rx="1" fill="rgba(200,180,122,0.15)"/>
+          <rect x="100" y="140" width="30" height="4" rx="1" fill="rgba(255,255,255,0.12)"/>
+          <rect x="100" y="148" width="22" height="4" rx="1" fill="rgba(200,180,122,0.6)"/>
+          <rect x="100" y="156" width="54" height="9" rx="3" fill="rgba(200,180,122,0.2)"/>
+          <text x="127" y="163" text-anchor="middle" font-size="6" fill="rgba(200,180,122,0.8)">Add to Cart</text>
+          <!-- Card 3 -->
+          <rect x="166" y="97" width="62" height="72" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(196,122,122,0.15)" stroke-width="0.5"/>
+          <rect x="170" y="101" width="54" height="34" rx="2" fill="rgba(196,122,122,0.08)"/>
+          <rect x="180" y="108" width="34" height="20" rx="2" fill="rgba(196,122,122,0.2)" stroke="rgba(196,122,122,0.4)" stroke-width="0.5"/>
+          <rect x="177" y="128" width="40" height="3" rx="1" fill="rgba(196,122,122,0.15)"/>
+          <rect x="170" y="140" width="30" height="4" rx="1" fill="rgba(255,255,255,0.12)"/>
+          <rect x="170" y="148" width="22" height="4" rx="1" fill="rgba(200,180,122,0.6)"/>
+          <rect x="170" y="156" width="54" height="9" rx="3" fill="rgba(196,122,122,0.2)"/>
+          <text x="197" y="163" text-anchor="middle" font-size="6" fill="rgba(196,122,122,0.8)">Add to Cart</text>
+          <!-- Card 4 -->
+          <rect x="236" y="97" width="62" height="72" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(124,184,160,0.15)" stroke-width="0.5"/>
+          <rect x="240" y="101" width="54" height="34" rx="2" fill="rgba(124,184,160,0.05)"/>
+          <rect x="250" y="108" width="34" height="20" rx="2" fill="rgba(124,184,160,0.15)" stroke="rgba(124,184,160,0.3)" stroke-width="0.5"/>
+          <rect x="247" y="128" width="40" height="3" rx="1" fill="rgba(124,184,160,0.1)"/>
+          <rect x="240" y="140" width="30" height="4" rx="1" fill="rgba(255,255,255,0.12)"/>
+          <rect x="240" y="148" width="22" height="4" rx="1" fill="rgba(200,180,122,0.6)"/>
+          <rect x="240" y="156" width="54" height="9" rx="3" fill="rgba(124,184,160,0.15)"/>
+          <text x="267" y="163" text-anchor="middle" font-size="6" fill="rgba(124,184,160,0.7)">Add to Cart</text>
+          <!-- Footer strip -->
+          <rect x="20" y="169" width="300" height="13" fill="rgba(10,20,12,0.8)"/>
+          <text x="160" y="178" text-anchor="middle" font-size="6" fill="rgba(255,255,255,0.2)" font-family="monospace">© 2025 VenCart · HTML · CSS · JS</text>
+        </svg>
+        <div class="project-thumb-overlay"><span class="overlay-text">View project</span></div>
+      </div>
+      <div class="project-body">
+        <div class="project-meta">
+          <span class="project-tag">HTML · CSS · JavaScript · Front-End</span>
+          <span class="project-year">2025</span>
+        </div>
+        <div class="project-title">VenCart E-Commerce Website</div>
+        <p class="project-desc">A fully responsive e-commerce storefront for laptops built from scratch with vanilla HTML, CSS, and JavaScript. Features a product listing page with filters, a dynamic shopping cart with local-storage persistence, a checkout flow, and a polished UI with smooth hover animations and mobile-first layouts.</p>
+        <div class="project-metrics">
+          <div class="project-metric">
+            <div class="metric-val">20+</div>
+            <div class="metric-label">UI components</div>
+          </div>
+          <div class="project-metric">
+            <div class="metric-val">100%</div>
+            <div class="metric-label">Responsive</div>
+          </div>
+          <div class="project-metric">
+            <div class="metric-val">0</div>
+            <div class="metric-label">Frameworks used</div>
+          </div>
+        </div>
+        <div class="project-tools">
+          <span class="tool-pill">HTML5</span>
+          <span class="tool-pill">CSS3</span>
+          <span class="tool-pill">JavaScript</span>
+          <span class="tool-pill">LocalStorage</span>
+          <span class="tool-pill">Flexbox / Grid</span>
+          <span class="tool-pill">Figma</span>
+        </div>
+        <!-- PROJECT LINKS -->
+        <div class="project-links">
+          <a href="https://github.com/Venkateshpola201/VenCart-E-Commerce-Website" target="_blank" class="project-link-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+            GitHub
+          </a>
+          <a href="https://vencart.netlify.app/" target="_blank" class="project-link-btn live">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Live demo
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 2: Grocery SQL -->
+    <div class="project-card">
+      <div class="project-thumb thumb-grocery">
+        <svg viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+          <rect x="30" y="40" width="80" height="50" rx="4" fill="none" stroke="rgba(200,180,122,0.3)" stroke-width="0.8"/>
+          <rect x="30" y="40" width="80" height="14" rx="4" fill="rgba(200,180,122,0.12)"/>
+          <text x="70" y="50.5" text-anchor="middle" font-size="8" fill="rgba(200,180,122,0.8)" font-family="monospace">customers</text>
+          <rect x="36" y="60" width="50" height="4" rx="1" fill="rgba(255,255,255,0.08)"/>
+          <rect x="36" y="68" width="40" height="4" rx="1" fill="rgba(255,255,255,0.06)"/>
+          <rect x="36" y="76" width="45" height="4" rx="1" fill="rgba(255,255,255,0.06)"/>
+          <rect x="130" y="20" width="80" height="50" rx="4" fill="none" stroke="rgba(124,184,160,0.3)" stroke-width="0.8"/>
+          <rect x="130" y="20" width="80" height="14" rx="4" fill="rgba(124,184,160,0.1)"/>
+          <text x="170" y="30.5" text-anchor="middle" font-size="8" fill="rgba(124,184,160,0.8)" font-family="monospace">orders</text>
+          <rect x="136" y="40" width="50" height="4" rx="1" fill="rgba(255,255,255,0.08)"/>
+          <rect x="136" y="48" width="40" height="4" rx="1" fill="rgba(255,255,255,0.06)"/>
+          <rect x="136" y="56" width="45" height="4" rx="1" fill="rgba(255,255,255,0.06)"/>
+          <rect x="230" y="40" width="80" height="50" rx="4" fill="none" stroke="rgba(200,180,122,0.3)" stroke-width="0.8"/>
+          <rect x="230" y="40" width="80" height="14" rx="4" fill="rgba(200,180,122,0.12)"/>
+          <text x="270" y="50.5" text-anchor="middle" font-size="8" fill="rgba(200,180,122,0.8)" font-family="monospace">products</text>
+          <rect x="236" y="60" width="50" height="4" rx="1" fill="rgba(255,255,255,0.08)"/>
+          <rect x="236" y="68" width="40" height="4" rx="1" fill="rgba(255,255,255,0.06)"/>
+          <rect x="236" y="76" width="45" height="4" rx="1" fill="rgba(255,255,255,0.06)"/>
+          <rect x="130" y="110" width="80" height="50" rx="4" fill="none" stroke="rgba(196,122,122,0.3)" stroke-width="0.8"/>
+          <rect x="130" y="110" width="80" height="14" rx="4" fill="rgba(196,122,122,0.1)"/>
+          <text x="170" y="120.5" text-anchor="middle" font-size="8" fill="rgba(196,122,122,0.8)" font-family="monospace">order_items</text>
+          <rect x="136" y="130" width="50" height="4" rx="1" fill="rgba(255,255,255,0.08)"/>
+          <rect x="136" y="138" width="40" height="4" rx="1" fill="rgba(255,255,255,0.06)"/>
+          <line x1="110" y1="65" x2="130" y2="45" stroke="rgba(255,255,255,0.12)" stroke-width="0.8" stroke-dasharray="3,2"/>
+          <line x1="210" y1="45" x2="230" y2="65" stroke="rgba(255,255,255,0.12)" stroke-width="0.8" stroke-dasharray="3,2"/>
+          <line x1="170" y1="70" x2="170" y2="110" stroke="rgba(255,255,255,0.12)" stroke-width="0.8" stroke-dasharray="3,2"/>
+          <rect x="30" y="120" width="90" height="62" rx="4" fill="rgba(10,10,8,0.8)" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+          <text x="38" y="135" font-size="7" fill="rgba(200,180,122,0.7)" font-family="monospace">SELECT</text>
+          <text x="38" y="145" font-size="7" fill="rgba(255,255,255,0.4)" font-family="monospace">  c.name,</text>
+          <text x="38" y="155" font-size="7" fill="rgba(255,255,255,0.4)" font-family="monospace">  SUM(o.total)</text>
+          <text x="38" y="165" font-size="7" fill="rgba(200,180,122,0.5)" font-family="monospace">FROM orders</text>
+          <text x="38" y="175" font-size="7" fill="rgba(124,184,160,0.5)" font-family="monospace">GROUP BY c.id</text>
+        </svg>
+        <div class="project-thumb-overlay"><span class="overlay-text">View details</span></div>
+      </div>
+      <div class="project-body">
+        <div class="project-meta">
+          <span class="project-tag">SQL · Database Design</span>
+          <span class="project-year">2024</span>
+        </div>
+        <div class="project-title">Grocery Store Management System</div>
+        <p class="project-desc">Designed a 7-table relational schema for a full grocery store — customers, orders, products, inventory, staff. Wrote 25 business analysis queries covering joins, subqueries, aggregations, and date functions.</p>
+        <div class="project-metrics">
+          <div class="project-metric">
+            <div class="metric-val">7</div>
+            <div class="metric-label">Tables</div>
+          </div>
+          <div class="project-metric">
+            <div class="metric-val">25</div>
+            <div class="metric-label">SQL queries</div>
+          </div>
+          <div class="project-metric">
+            <div class="metric-val">17</div>
+            <div class="metric-label">Slide deck</div>
+          </div>
+        </div>
+        <div class="project-tools">
+          <span class="tool-pill">MySQL</span>
+          <span class="tool-pill">SQL JOINs</span>
+          <span class="tool-pill">Subqueries</span>
+          <span class="tool-pill">Window Functions</span>
+          <span class="tool-pill">PowerPoint</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/Venkateshpola201/Grocery-Store-Management-System" target="_blank" class="project-link-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 3: Stroke EDA -->
+    <div class="project-card">
+      <div class="project-thumb thumb-stroke">
+        <svg viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+          <rect x="30" y="30" width="180" height="100" rx="6" fill="rgba(196,122,122,0.05)" stroke="rgba(196,122,122,0.2)" stroke-width="0.5"/>
+          <text x="120" y="48" text-anchor="middle" font-size="9" fill="rgba(196,122,122,0.6)" font-family="monospace">stroke correlation heatmap</text>
+          <rect x="40" y="55" width="20" height="20" rx="2" fill="rgba(196,122,122,0.7)"/>
+          <rect x="64" y="55" width="20" height="20" rx="2" fill="rgba(196,122,122,0.4)"/>
+          <rect x="88" y="55" width="20" height="20" rx="2" fill="rgba(196,122,122,0.15)"/>
+          <rect x="112" y="55" width="20" height="20" rx="2" fill="rgba(196,122,122,0.5)"/>
+          <rect x="136" y="55" width="20" height="20" rx="2" fill="rgba(196,122,122,0.3)"/>
+          <rect x="160" y="55" width="20" height="20" rx="2" fill="rgba(124,184,160,0.4)"/>
+          <rect x="40" y="79" width="20" height="20" rx="2" fill="rgba(196,122,122,0.4)"/>
+          <rect x="64" y="79" width="20" height="20" rx="2" fill="rgba(196,122,122,0.7)"/>
+          <rect x="88" y="79" width="20" height="20" rx="2" fill="rgba(196,122,122,0.3)"/>
+          <rect x="112" y="79" width="20" height="20" rx="2" fill="rgba(124,184,160,0.2)"/>
+          <rect x="136" y="79" width="20" height="20" rx="2" fill="rgba(196,122,122,0.55)"/>
+          <rect x="160" y="79" width="20" height="20" rx="2" fill="rgba(196,122,122,0.25)"/>
+          <rect x="40" y="103" width="20" height="20" rx="2" fill="rgba(124,184,160,0.3)"/>
+          <rect x="64" y="103" width="20" height="20" rx="2" fill="rgba(196,122,122,0.35)"/>
+          <rect x="88" y="103" width="20" height="20" rx="2" fill="rgba(196,122,122,0.65)"/>
+          <rect x="112" y="103" width="20" height="20" rx="2" fill="rgba(196,122,122,0.2)"/>
+          <rect x="136" y="103" width="20" height="20" rx="2" fill="rgba(124,184,160,0.4)"/>
+          <rect x="160" y="103" width="20" height="20" rx="2" fill="rgba(196,122,122,0.45)"/>
+          <rect x="224" y="30" width="86" height="36" rx="4" fill="rgba(196,122,122,0.08)" stroke="rgba(196,122,122,0.2)" stroke-width="0.5"/>
+          <text x="267" y="47" text-anchor="middle" font-size="14" fill="rgba(196,122,122,0.9)" font-family="serif" font-weight="300">5,110</text>
+          <text x="267" y="58" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.3)" font-family="monospace">records</text>
+          <rect x="224" y="74" width="86" height="36" rx="4" fill="rgba(124,184,160,0.08)" stroke="rgba(124,184,160,0.2)" stroke-width="0.5"/>
+          <text x="267" y="91" text-anchor="middle" font-size="14" fill="rgba(124,184,160,0.9)" font-family="serif" font-weight="300">4.87%</text>
+          <text x="267" y="102" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.3)" font-family="monospace">stroke rate</text>
+          <rect x="224" y="118" width="86" height="36" rx="4" fill="rgba(200,180,122,0.08)" stroke="rgba(200,180,122,0.2)" stroke-width="0.5"/>
+          <text x="267" y="135" text-anchor="middle" font-size="14" fill="rgba(200,180,122,0.9)" font-family="serif" font-weight="300">11</text>
+          <text x="267" y="146" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.3)" font-family="monospace">features</text>
+          <rect x="30" y="142" width="180" height="36" rx="4" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+          <rect x="38" y="150" width="24" height="3" rx="1" fill="rgba(196,122,122,0.6)"/>
+          <rect x="68" y="150" width="18" height="3" rx="1" fill="rgba(200,180,122,0.5)"/>
+          <rect x="92" y="150" width="28" height="3" rx="1" fill="rgba(124,184,160,0.5)"/>
+          <rect x="38" y="158" width="20" height="3" rx="1" fill="rgba(255,255,255,0.08)"/>
+          <rect x="64" y="158" width="30" height="3" rx="1" fill="rgba(255,255,255,0.06)"/>
+          <rect x="100" y="158" width="22" height="3" rx="1" fill="rgba(255,255,255,0.08)"/>
+          <rect x="38" y="166" width="15" height="3" rx="1" fill="rgba(255,255,255,0.06)"/>
+          <rect x="59" y="166" width="35" height="3" rx="1" fill="rgba(255,255,255,0.05)"/>
+        </svg>
+        <div class="project-thumb-overlay"><span class="overlay-text">View details</span></div>
+      </div>
+      <div class="project-body">
+        <div class="project-meta">
+          <span class="project-tag">EDA · Machine Learning</span>
+          <span class="project-year">2024</span>
+        </div>
+        <div class="project-title">Stroke Analysis EDA</div>
+        <p class="project-desc">Performed Exploratory Data Analysis on a real-world dataset using Jupyter Notebook — including data cleaning, visualization, trend analysis, feature relationships, and actionable insights through Python libraries like Pandas, Matplotlib, and Seaborn.
+</p>
+        <div class="project-metrics">
+          <div class="project-metric">
+            <div class="metric-val">5,110</div>
+            <div class="metric-label">Records</div>
+          </div>
+          <div class="project-metric">
+            <div class="metric-val">11</div>
+            <div class="metric-label">Features</div>
+          </div>
+          <div class="project-metric">
+            <div class="metric-val">4</div>
+            <div class="metric-label">Analysis layers</div>
+          </div>
+        </div>
+        <div class="project-tools">
+          <span class="tool-pill">Python</span>
+          <span class="tool-pill">Pandas</span>
+          <span class="tool-pill">Seaborn</span>
+          <span class="tool-pill">Matplotlib</span>
+          <span class="tool-pill">Jupyter</span>
+          <span class="tool-pill">Kaggle</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/Venkateshpola201" target="_blank" class="project-link-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+            GitHub
+          </a>
+          <a href="http://localhost:8888/notebooks/EDAproject.ipynb" target="_blank" class="project-link-btn demo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            Notebook
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 4: Flipkart -->
+    <div class="project-card">
+      <div class="project-thumb thumb-flipkart">
+        <svg viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+          <rect x="30" y="30" width="280" height="140" rx="6" fill="rgba(124,184,160,0.03)" stroke="rgba(124,184,160,0.15)" stroke-width="0.5"/>
+          <rect x="30" y="30" width="280" height="20" rx="6" fill="rgba(124,184,160,0.08)"/>
+          <circle cx="44" cy="40" r="4" fill="rgba(196,122,122,0.4)"/>
+          <circle cx="56" cy="40" r="4" fill="rgba(200,180,122,0.4)"/>
+          <circle cx="68" cy="40" r="4" fill="rgba(124,184,160,0.4)"/>
+          <rect x="90" y="35" width="180" height="10" rx="5" fill="rgba(255,255,255,0.05)"/>
+          <text x="180" y="43" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.2)" font-family="monospace">flipkart.com/laptops</text>
+          <rect x="40" y="62" width="260" height="100" rx="4" fill="rgba(10,10,8,0.7)"/>
+          <text x="52" y="80" font-size="8" fill="rgba(200,180,122,0.7)" font-family="monospace">import requests</text>
+          <text x="52" y="92" font-size="8" fill="rgba(200,180,122,0.7)" font-family="monospace">from bs4 import BeautifulSoup</text>
+          <text x="52" y="108" font-size="8" fill="rgba(124,184,160,0.6)" font-family="monospace">API_KEY = os.getenv("SCRAPER_KEY")</text>
+          <text x="52" y="120" font-size="8" fill="rgba(255,255,255,0.3)" font-family="monospace">url  = f"http://api.scraperapi.com?"</text>
+          <text x="52" y="132" font-size="8" fill="rgba(255,255,255,0.3)" font-family="monospace">resp = requests.get(url)</text>
+          <text x="52" y="144" font-size="8" fill="rgba(196,122,122,0.6)" font-family="monospace">soup = BeautifulSoup(resp.text)</text>
+          <text x="52" y="156" font-size="8" fill="rgba(124,184,160,0.5)" font-family="monospace">prices = soup.find_all('div', cls)</text>
+        </svg>
+        <div class="project-thumb-overlay"><span class="overlay-text">View details</span></div>
+      </div>
+      <div class="project-body">
+        <div class="project-meta">
+          <span class="project-tag">Web Scraping · API</span>
+          <span class="project-year">2024</span>
+        </div>
+        <div class="project-title">Flipkart Scraper via ScraperAPI</div>
+        <p class="project-desc">Built an anti-bot-bypass scraper for Flipkart laptop listings using ScraperAPI as a proxy layer. Extracted product titles, prices, ratings, and specs with BeautifulSoup for downstream price comparison analysis.</p>
+        <div class="project-metrics">
+          <div class="project-metric">
+            <div class="metric-val">API</div>
+            <div class="metric-label">Proxy bypass</div>
+          </div>
+          <div class="project-metric">
+            <div class="metric-val">BS4</div>
+            <div class="metric-label">Parser</div>
+          </div>
+          <div class="project-metric">
+            <div class="metric-val">CSV</div>
+            <div class="metric-label">Output format</div>
+          </div>
+        </div>
+        <div class="project-tools">
+          <span class="tool-pill">Python</span>
+          <span class="tool-pill">ScraperAPI</span>
+          <span class="tool-pill">BeautifulSoup</span>
+          <span class="tool-pill">Requests</span>
+          <span class="tool-pill">Pandas</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/Venkateshpola201" target="_blank" class="project-link-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+            GitHub
+          </a>
+          <a href="http://localhost:8888/notebooks/Croma-final.ipynb" target="_blank" class="project-link-btn demo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            Notebook
+          </a>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Project 5: Croma Scraping & EDA -->
+    <div class="project-card">
+      <div class="project-thumb thumb-croma">
+        <svg viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+          <!-- Code panel left -->
+          <rect x="22" y="24" width="142" height="152" rx="6" fill="rgba(10,10,8,0.85)" stroke="rgba(124,184,160,0.2)" stroke-width="0.8"/>
+          <rect x="22" y="24" width="142" height="16" rx="6" fill="rgba(124,184,160,0.1)"/>
+          <text x="93" y="35" text-anchor="middle" font-size="7" fill="rgba(124,184,160,0.7)" font-family="monospace">scraper.py</text>
+          <text x="32" y="54" font-size="7" fill="rgba(200,180,122,0.7)" font-family="monospace">from selenium import</text>
+          <text x="32" y="65" font-size="7" fill="rgba(200,180,122,0.7)" font-family="monospace">  webdriver</text>
+          <text x="32" y="78" font-size="7" fill="rgba(124,184,160,0.6)" font-family="monospace">driver.get("croma.com")</text>
+          <text x="32" y="91" font-size="7" fill="rgba(255,255,255,0.3)" font-family="monospace">cards = soup.find_all(</text>
+          <text x="32" y="102" font-size="7" fill="rgba(255,255,255,0.3)" font-family="monospace">  'li', class_='item')</text>
+          <text x="32" y="115" font-size="7" fill="rgba(196,122,122,0.6)" font-family="monospace">for card in cards:</text>
+          <text x="32" y="126" font-size="7" fill="rgba(255,255,255,0.25)" font-family="monospace">  name  = card.h3.text</text>
+          <text x="32" y="137" font-size="7" fill="rgba(255,255,255,0.25)" font-family="monospace">  price = card.span.text</text>
+          <text x="32" y="148" font-size="7" fill="rgba(124,184,160,0.5)" font-family="monospace">df.to_csv('laptops.csv')</text>
+          <!-- Chart panel right -->
+          <rect x="174" y="24" width="144" height="152" rx="6" fill="rgba(10,10,8,0.7)" stroke="rgba(200,180,122,0.2)" stroke-width="0.8"/>
+          <rect x="174" y="24" width="144" height="16" rx="6" fill="rgba(200,180,122,0.08)"/>
+          <text x="246" y="35" text-anchor="middle" font-size="7" fill="rgba(200,180,122,0.7)" font-family="monospace">brand_distribution.png</text>
+          <!-- Bar chart -->
+          <text x="184" y="58" font-size="6.5" fill="rgba(255,255,255,0.3)" font-family="monospace">Brand EDA</text>
+          <!-- Bars -->
+          <rect x="184" y="100" width="16" height="30" rx="2" fill="rgba(200,180,122,0.7)"/>
+          <rect x="204" y="88" width="16" height="42" rx="2" fill="rgba(124,184,160,0.7)"/>
+          <rect x="224" y="95" width="16" height="35" rx="2" fill="rgba(200,180,122,0.5)"/>
+          <rect x="244" y="80" width="16" height="50" rx="2" fill="rgba(124,184,160,0.5)"/>
+          <rect x="264" y="92" width="16" height="38" rx="2" fill="rgba(196,122,122,0.6)"/>
+          <rect x="284" y="105" width="16" height="25" rx="2" fill="rgba(200,180,122,0.4)"/>
+          <!-- x-axis -->
+          <line x1="184" y1="132" x2="304" y2="132" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+          <text x="192" y="141" font-size="5.5" fill="rgba(255,255,255,0.2)" font-family="monospace">HP</text>
+          <text x="210" y="141" font-size="5.5" fill="rgba(255,255,255,0.2)" font-family="monospace">Dell</text>
+          <text x="229" y="141" font-size="5.5" fill="rgba(255,255,255,0.2)" font-family="monospace">Lenovo</text>
+          <text x="257" y="141" font-size="5.5" fill="rgba(255,255,255,0.2)" font-family="monospace">Asus</text>
+          <text x="276" y="141" font-size="5.5" fill="rgba(255,255,255,0.2)" font-family="monospace">MSI</text>
+          <!-- Stat pills -->
+          <rect x="184" y="150" width="38" height="16" rx="3" fill="rgba(200,180,122,0.12)" stroke="rgba(200,180,122,0.3)" stroke-width="0.5"/>
+          <text x="203" y="161" text-anchor="middle" font-size="6.5" fill="rgba(200,180,122,0.8)" font-family="monospace">200+ rows</text>
+          <rect x="228" y="150" width="34" height="16" rx="3" fill="rgba(124,184,160,0.1)" stroke="rgba(124,184,160,0.3)" stroke-width="0.5"/>
+          <text x="245" y="161" text-anchor="middle" font-size="6.5" fill="rgba(124,184,160,0.8)" font-family="monospace">8 charts</text>
+          <rect x="268" y="150" width="30" height="16" rx="3" fill="rgba(196,122,122,0.1)" stroke="rgba(196,122,122,0.3)" stroke-width="0.5"/>
+          <text x="283" y="161" text-anchor="middle" font-size="6.5" fill="rgba(196,122,122,0.8)" font-family="monospace">11 slides</text>
+        </svg>
+        <div class="project-thumb-overlay"><span class="overlay-text">View details</span></div>
+      </div>
+      <div class="project-body">
+        <div class="project-meta">
+          <span class="project-tag">Web Scraping · EDA · Python</span>
+          <span class="project-year">2025</span>
+        </div>
+        <div class="project-title">Croma Laptop Scraping &amp; EDA</div>
+        <p class="project-desc">Scraped 200+ laptop listings from Croma using Selenium and BeautifulSoup. Performed full EDA — brand distribution, RAM/SSD breakdown, price segmentation — and visualised findings across 8 charts in an 11-slide presentation deck.</p>
+        <div class="project-metrics">
+          <div class="project-metric">
+            <div class="metric-val">200+</div>
+            <div class="metric-label">Records scraped</div>
+          </div>
+          <div class="project-metric">
+            <div class="metric-val">8</div>
+            <div class="metric-label">EDA charts</div>
+          </div>
+          <div class="project-metric">
+            <div class="metric-val">11</div>
+            <div class="metric-label">Slide deck</div>
+          </div>
+        </div>
+        <div class="project-tools">
+          <span class="tool-pill">Python</span>
+          <span class="tool-pill">Selenium</span>
+          <span class="tool-pill">BeautifulSoup</span>
+          <span class="tool-pill">Pandas</span>
+          <span class="tool-pill">Matplotlib</span>
+          <span class="tool-pill">PowerBI</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/Venkateshpola201" target="_blank" class="project-link-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+            GitHub
+          </a>
+          <a href="http://localhost:8888/notebooks/Croma-final.ipynb" target="_blank" class="project-link-btn demo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            Notebook
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 6: UI/UX Design System -->
+    <div class="project-card">
+      <div class="project-thumb thumb-uiux">
+        <svg viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+          <!-- Figma-style frame -->
+          <rect x="20" y="18" width="300" height="164" rx="6" fill="rgba(12,10,20,0.9)" stroke="rgba(180,130,220,0.2)" stroke-width="0.8"/>
+          <!-- Left panel (layers) -->
+          <rect x="20" y="18" width="56" height="164" rx="6" fill="rgba(15,12,24,0.95)"/>
+          <text x="48" y="32" text-anchor="middle" font-size="6.5" fill="rgba(180,130,220,0.6)" font-family="monospace">Layers</text>
+          <rect x="28" y="38" width="36" height="5" rx="1" fill="rgba(255,255,255,0.06)"/>
+          <rect x="28" y="47" width="28" height="5" rx="1" fill="rgba(200,180,122,0.2)"/>
+          <rect x="28" y="56" width="32" height="5" rx="1" fill="rgba(255,255,255,0.06)"/>
+          <rect x="28" y="65" width="24" height="5" rx="1" fill="rgba(124,184,160,0.2)"/>
+          <rect x="28" y="74" width="30" height="5" rx="1" fill="rgba(255,255,255,0.06)"/>
+          <rect x="28" y="83" width="20" height="5" rx="1" fill="rgba(180,130,220,0.3)"/>
+          <rect x="28" y="92" width="34" height="5" rx="1" fill="rgba(255,255,255,0.06)"/>
+          <!-- Main canvas -->
+          <rect x="82" y="26" width="170" height="148" rx="4" fill="rgba(8,8,16,0.7)" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+          <!-- Wireframe: mobile app mockup -->
+          <rect x="118" y="34" width="96" height="132" rx="8" fill="rgba(18,12,30,0.9)" stroke="rgba(180,130,220,0.3)" stroke-width="0.8"/>
+          <!-- Status bar -->
+          <rect x="118" y="34" width="96" height="10" rx="8" fill="rgba(180,130,220,0.08)"/>
+          <!-- App header -->
+          <rect x="124" y="48" width="60" height="7" rx="2" fill="rgba(200,180,122,0.5)"/>
+          <rect x="196" y="49" width="12" height="5" rx="2" fill="rgba(180,130,220,0.3)"/>
+          <!-- Search bar -->
+          <rect x="124" y="60" width="84" height="10" rx="5" fill="rgba(255,255,255,0.05)" stroke="rgba(180,130,220,0.2)" stroke-width="0.5"/>
+          <rect x="128" y="63" width="40" height="4" rx="2" fill="rgba(255,255,255,0.08)"/>
+          <!-- Product card 1 -->
+          <rect x="124" y="76" width="38" height="46" rx="4" fill="rgba(180,130,220,0.06)" stroke="rgba(180,130,220,0.15)" stroke-width="0.5"/>
+          <rect x="127" y="79" width="32" height="22" rx="2" fill="rgba(180,130,220,0.12)"/>
+          <rect x="127" y="104" width="22" height="4" rx="1" fill="rgba(255,255,255,0.1)"/>
+          <rect x="127" y="111" width="16" height="4" rx="1" fill="rgba(200,180,122,0.5)"/>
+          <!-- Product card 2 -->
+          <rect x="168" y="76" width="38" height="46" rx="4" fill="rgba(124,184,160,0.06)" stroke="rgba(124,184,160,0.15)" stroke-width="0.5"/>
+          <rect x="171" y="79" width="32" height="22" rx="2" fill="rgba(124,184,160,0.12)"/>
+          <rect x="171" y="104" width="22" height="4" rx="1" fill="rgba(255,255,255,0.1)"/>
+          <rect x="171" y="111" width="16" height="4" rx="1" fill="rgba(200,180,122,0.5)"/>
+          <!-- Bottom nav -->
+          
+          <!-- Right panel (properties) -->
+          <rect x="258" y="18" width="62" height="164" rx="6" fill="rgba(15,12,24,0.95)"/>
+          <text x="289" y="32" text-anchor="middle" font-size="6.5" fill="rgba(180,130,220,0.6)" font-family="monospace">Design</text>
+          <!-- Color swatches -->
+          <circle cx="272" cy="46" r="5" fill="rgba(200,180,122,0.9)"/>
+          <circle cx="284" cy="46" r="5" fill="rgba(180,130,220,0.9)"/>
+          <circle cx="296" cy="46" r="5" fill="rgba(124,184,160,0.9)"/>
+          <circle cx="308" cy="46" r="5" fill="rgba(196,122,122,0.9)"/>
+          <rect x="266" y="58" width="46" height="4" rx="1" fill="rgba(255,255,255,0.08)"/>
+          <rect x="266" y="66" width="36" height="4" rx="1" fill="rgba(200,180,122,0.2)"/>
+          <rect x="266" y="74" width="40" height="4" rx="1" fill="rgba(255,255,255,0.06)"/>
+          <!-- Typography preview -->
+          <rect x="266" y="86" width="46" height="22" rx="3" fill="rgba(180,130,220,0.06)" stroke="rgba(180,130,220,0.15)" stroke-width="0.5"/>
+          <text x="289" y="97" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.4)" font-family="serif" font-style="italic">Aa</text>
+          <text x="289" y="104" text-anchor="middle" font-size="5.5" fill="rgba(180,130,220,0.5)" font-family="monospace">Syne</text>
+          <!-- Component tokens -->
+          <rect x="266" y="114" width="46" height="6" rx="3" fill="rgba(200,180,122,0.2)"/>
+          <rect x="266" y="124" width="46" height="6" rx="3" fill="rgba(180,130,220,0.15)" stroke="rgba(180,130,220,0.3)" stroke-width="0.5"/>
+          <rect x="266" y="134" width="46" height="6" rx="3" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+        </svg>
+        <div class="project-thumb-overlay"><span class="overlay-text">View designs</span></div>
+      </div>
+      <div class="project-body">
+        <div class="project-meta">
+          <span class="project-tag">UI/UX · Python · OpenCV</span>
+          <span class="project-year">2025</span>
+        </div>
+        <div class="project-title">Face Recognition Attendance System</div>
+        <p class="project-desc">Developed a Face Recognition Attendance System with dataset collection, face detection, real-time recognition, automated attendance marking with timestamps, and a dashboard for monitoring records.</p>
+        <div class="project-metrics">
+          <div class="project-metric">
+            <div class="metric-val">20+</div>
+            <div class="metric-label">Registered Faces</div>
+          </div>
+          <div class="project-metric">
+            <div class="metric-val">90%+</div>
+            <div class="metric-label">Recognition Accuracy</div>
+          </div>
+          <div class="project-metric">
+            <div class="metric-val">24/7</div>
+            <div class="metric-label">Real Time Attendance</div>
+          </div>
+        </div>
+        <div class="project-tools">
+          <span class="tool-pill">Python</span>
+          <span class="tool-pill">OpenCV</span>
+          <span class="tool-pill">DateTime</span>
+          <span class="tool-pill">MySQL</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/Venkateshpola201" target="_blank" class="project-link-btn live">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="skills-inner">
+    <div class="section-tag">Expertise</div>
+    <h2>Skills &amp; <em>tools</em></h2>
+    <div class="skills-layout">
+      <div class="skills-intro">
+        <p style="margin-bottom:16px;">I work across the full design-to-data pipeline — from sketching wireframes and building Figma prototypes to writing complex SQL queries, working in Jupyter Notebook, leveraging GenAI tools, and building Python scrapers that feed real insights into design decisions. I also use Streamlit to create interactive data apps, and Git & GitHub for version control, collaboration, and efficient project management.</p>
+        <p style="margin-bottom:16px;">My approach is evidence-first: every interface I design is backed by user research or data analysis, and every dataset I analyse is framed around the human story it tells.</p>
+        <p>Currently learning AR/VR prototyping and advanced GenAI-assisted design workflows to stay ahead of what's next.</p>
+      </div>
+      <div class="skills-groups" id="skill-bars">
+
+        <div>
+          <div class="skill-group-title">Design &amp; UX</div>
+          <div class="skill-bars">
+            <div class="skill-row"><span class="skill-name-label">Figma / Prototyping</span><div class="skill-track"><div class="skill-fill" style="background:var(--accent);" data-w="88"></div></div><span class="skill-pct">88%</span></div>
+            <div class="skill-row"><span class="skill-name-label">User research</span><div class="skill-track"><div class="skill-fill" style="background:var(--accent);" data-w="80"></div></div><span class="skill-pct">80%</span></div>
+            <div class="skill-row"><span class="skill-name-label">Interaction design</span><div class="skill-track"><div class="skill-fill" style="background:var(--accent);" data-w="78"></div></div><span class="skill-pct">78%</span></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="skill-group-title">Data &amp; Engineering</div>
+          <div class="skill-bars">
+            <div class="skill-row"><span class="skill-name-label">Python</span><div class="skill-track"><div class="skill-fill" style="background:var(--accent2);" data-w="85"></div></div><span class="skill-pct">85%</span></div>
+            <div class="skill-row"><span class="skill-name-label">SQL / MySQL</span><div class="skill-track"><div class="skill-fill" style="background:var(--accent2);" data-w="82"></div></div><span class="skill-pct">82%</span></div>
+            <div class="skill-row"><span class="skill-name-label">Web scraping</span><div class="skill-track"><div class="skill-fill" style="background:var(--accent2);" data-w="88"></div></div><span class="skill-pct">88%</span></div>
+            <div class="skill-row"><span class="skill-name-label">Data visualisation</span><div class="skill-track"><div class="skill-fill" style="background:var(--accent2);" data-w="80"></div></div><span class="skill-pct">80%</span></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="skill-group-title">Frontend</div>
+          <div class="skill-bars">
+            <div class="skill-row"><span class="skill-name-label">HTML / CSS</span><div class="skill-track"><div class="skill-fill" style="background:var(--accent3);" data-w="90"></div></div><span class="skill-pct">90%</span></div>
+            <div class="skill-row"><span class="skill-name-label">JavaScript</span><div class="skill-track"><div class="skill-fill" style="background:var(--accent3);" data-w="80"></div></div><span class="skill-pct">80%</span></div>
+            <div class="skill-row"><span class="skill-name-label">Bootstrap</span><div class="skill-track"><div class="skill-fill" style="background:var(--accent3);" data-w="60"></div></div><span class="skill-pct">60%</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TIMELINE -->
+<section id="timeline">
+  <div style="max-width:1200px;margin:0 auto;padding:0;">
+    <div class="section-tag">Journey</div>
+    <h2>Education</h2>
+  </div>
+  <div class="timeline-inner">
+
+    <div class="tl-item">
+      <div class="tl-year">2025 – Now</div>
+      <div class="tl-line"><div class="tl-dot"></div></div>
+      <div class="tl-content">
+        <div class="tl-title">Data Science Programme</div>
+        <div class="tl-org">Innomatics Research Labs · Hyderabad</div>
+        <div class="tl-desc">Python, EDA, Adv. Stats, MySQL, PowerBI, Machine Learning, NLP, DL, GenAI</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-year">2021 – 2025</div>
+      <div class="tl-line"><div class="tl-dot"></div></div>
+      <div class="tl-content">
+        <div class="tl-title">Bachelor Of Technology</div>
+        <div class="tl-org">Hyderabad Institute Of Technology &amp; Management · Hyderabad</div>
+        <div class="tl-desc">Electronics &amp; Communication Engineering · Percentage : 70.49/100</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-year">2019 – 2021</div>
+      <div class="tl-line"><div class="tl-dot"></div></div>
+      <div class="tl-content">
+        <div class="tl-title">Telangana State Board of Intermediate Education</div>
+        <div class="tl-org">Geetha Junior College · Medak</div>
+        <div class="tl-desc">Mathematics, Physics, Chemistry, English · Percentage : 93.4/100</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-year">2018 – 2019</div>
+      <div class="tl-line"><div class="tl-dot"></div></div>
+      <div class="tl-content">
+        <div class="tl-title">Board Of Secondary Education, Telangana</div>
+        <div class="tl-org">Telangana State Model School, Sangareddy</div>
+        <div class="tl-desc">Mathematics, Science, Physics, Biology, Social Studies · CGPA : 9.2/10</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="section-tag" style="justify-content:center;">Let's connect</div>
+    <div class="contact-big">Let's <em>build</em><br/>something great</div>
+    <p class="contact-sub">I'm actively looking for UI/UX and data science internship opportunities. Let's talk.</p>
+    <div class="contact-links">
+      <a href="mailto:venkateshpola@email.com" class="contact-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        Email me
+      </a>
+      <a href="https://linkedin.com/in/venkateshpola" target="_blank" class="contact-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+      <a href="https://github.com/Venkateshpola201" target="_blank" class="contact-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2025 Pola Venkatesh · Hyderabad, India</span>
+  <span>UI/UX Design · Data Science · Python · SQL</span>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx+'px'; cursor.style.top = my+'px'; });
+  function animRing() { rx += (mx-rx)*0.12; ry += (my-ry)*0.12; ring.style.left = rx+'px'; ring.style.top = ry+'px'; requestAnimationFrame(animRing); }
+  animRing();
+  document.querySelectorAll('a, button, .project-card').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.width='16px'; cursor.style.height='16px'; ring.style.width='52px'; ring.style.height='52px'; });
+    el.addEventListener('mouseleave', () => { cursor.style.width='10px'; cursor.style.height='10px'; ring.style.width='36px'; ring.style.height='36px'; });
+  });
+
+  // Navbar scroll
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 40); });
+
+  // Skill bars — observe each row individually so bars only animate when visible
+  const rowObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const fill = e.target.querySelector('.skill-fill');
+        if (fill) {
+          setTimeout(() => { fill.style.width = fill.dataset.w + '%'; }, 80);
+        }
+        rowObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.6 });
+  document.querySelectorAll('.skill-row').forEach(row => rowObs.observe(row));
+</script>
+</body>
+</html>
